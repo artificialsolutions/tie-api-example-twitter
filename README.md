@@ -7,6 +7,7 @@ Sample web app and helper scripts to get started with Twitter's premium Account 
 Your bot needs to be published and you need to know the engine url.
 
 ### Twitter account
+You will need to apply for a Twitter Developer Account and then create a Twitter app, as described ahead.
 
 ### HTTPS
 A [Heroku](https://www.heroku.com/home) account is required to deploy the connector online.
@@ -15,15 +16,27 @@ Or, to run the connector locally, [ngrok](https://ngrok.com/) is preferred to ma
 
 
 
-## Create and configure a Twitter app
+## Create a Twitter app
 
-1. Create a Twitter app on [developer.twitter.com](https://developer.twitter.com/en/apps)
+1. Apply for a Twitter Developer account on [developer.twitter.com](https://developer.twitter.com/en/apps), selecting "Making a Bot", and filling in all required fields. On the specifics section, set "Will your app use Tweet, Retweet, like, follow, or Direct Message functionality?" to YES. You may set all other options to No. Continue filling in required descriptions and validating the Twitter's activation email.
+
+2. Create a Twitter App [here](https://developer.twitter.com/en/apps/create). Fill in all required fields and tap "Create"
+
+3. Configure you new Twitter App
 
 2. On the **Permissions** tab > **Edit** > **Access permission** section > enable **Read, Write and direct messages**.
 
 3. On the **Keys and Tokens** tab > **Access token & access token secret** section > click **Create** button.
 
 4. On the **Keys and Tokens** tab, take note of the `consumer API key`, `consumer API secret`, `access token` and `access token secret`.
+
+## Create a Twitter Account Activity API
+Twitter Account Activity API provides virtually real-time feedback of events such as new tweets or new DMs, and does so without exhausting Twitter's Rate limit. 
+Click [Setup Dev Environment](https://developer.twitter.com/en/account/environments) create a new environment. Link it to the App you created previously and take note of this Environment's na for later use.
+
+## Configure the Twitter App
+
+
 
 ## Setup & run the Node.js web app
 
