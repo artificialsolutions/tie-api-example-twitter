@@ -1,0 +1,7 @@
+{
+  "name": "account-activity-dashboard",
+  "description": "Sample web app to get started with implementing communication between Twitter and Teneo Engine via Direc Messages",
+  "repository": "https://github.com/twitterdev/account-activity-dashboard",
+  "keywords": ["teneo", "artificial solutions", "node", "express", "api", "webhook", "twitter"],
+  "success_url": "/"
+}
