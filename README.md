@@ -1,13 +1,19 @@
-# account-activity-dashboard
+# tie-api-example-twitter
 
 Sample web app and helper scripts to get started with Twitter's premium Account Activity API (All Activities). Written in Node.js. Full documentation for this API can be found on developer.twitter.com [here](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/overview).
 
-## Dependencies
+## Prerequisites
+### Teneo Engine
+Your bot needs to be published and you need to know the engine url.
 
-* A Twitter app created on [developer.twitter.com](https://developer.twitter.com/en/apps), whitelisted for access to the Account Activity API
-* [Node.js](https://nodejs.org)
-* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) or other webhost (optional)
-* [ngrok](https://ngrok.com/) or other tunneling service (optional)
+### Twitter account
+
+### HTTPS
+A [Heroku](https://www.heroku.com/home) account is required to deploy the connector online.
+
+Or, to run the connector locally, [ngrok](https://ngrok.com/) is preferred to make the connector available via HTTPS.
+
+
 
 ## Create and configure a Twitter app
 
