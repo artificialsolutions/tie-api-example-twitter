@@ -1,7 +1,32 @@
 {
-  "name": "account-activity-dashboard",
-  "description": "Sample web app to get started with implementing communication between Twitter and Teneo Engine via Direc Messages",
-  "repository": "https://github.com/twitterdev/account-activity-dashboard",
+  "name": "tie-example-twitter",
+  "description": "Sample web app to get started with implementing communication between Twitter and Teneo Engine via Direct Messages",
+  "repository": "https://github.com/artificialsolutions/tie-api-example-twitter",
   "keywords": ["teneo", "artificial solutions", "node", "express", "api", "webhook", "twitter"],
-  "success_url": "/"
+    "env": {    
+        "TWITTER_CONSUMER_KEY": {
+            "description": "Twitter Consumer Key",
+            "required":true
+        },
+        "TWITTER_CONSUMER_SECRET": {
+            "description": "Twitter Consumer Secret key",
+            "required":true
+        },        
+        "TWITTER_ACCESS_TOKEN": {
+            "description": "Twitter Access token",
+            "required":true
+        },
+        "TWITTER_ACCESS_TOKEN_SECRET": {
+          "description": "Twitter Access Secret token",
+          "required":true
+        },
+        "TWITTER_WEBHOOK_ENV": {
+          "description": "Twitter Activity API Webhook's  Environment",
+          "required":true
+        },
+        "TENEO_ENGINE_URL": {
+            "description": "Your Teneo Engine URL. https://some.engine/instance/",
+            "required":true
+        }
+    }
 }
