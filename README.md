@@ -1,7 +1,4 @@
 # tie-api-example-twitter
-
-Sample web app and helper scripts to get started with Twitter's premium Account Activity API (All Activities). Written in Node.js. Full documentation for this API can be found on developer.twitter.com [here](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/overview).
-
 This Node.js connector acts as a middleware that implements communication via Direct Messages between a Teneo bot and Twitter users. Communication with persisting state and conversational position. The connector uses Twitter's [Account Activity API](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/overview) to detect and react to new DM events, without quickly exhausting Twitter's Rate Limit.
 
 
@@ -31,15 +28,27 @@ The configuration of this Twitter app continues ahead.
 In the Account Activity API/Sandbox section, click [Setup Dev Environment](https://developer.twitter.com/en/account/environments). Link this new environment to the App you created in the previous step and take note of the Environment's Label for later use.
 
 ## Configure the Twitter App
-on Account Activity API/Sandbox
+1. Open your app's [Details](https://developer.twitter.com/en/apps)
+2. Navigate into Permissions > Edit > Access permission section > Enable Read, Write and direct messages.
+3. On the Keys and Tokens tab > Access token & access token secret section > click Create button. Take note of all four keys and tokens.
 
+## Create a Webhook endpoint
+A Free Twitter Developer account allows the creation of one webhook that can be used to receive user events on a web app.
+Set up a webhook with this command on the project's root folder:
 
+    ```bash
+    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <url>
+    ```
+    
+    WIP subscribe to self
+    
+    
 ## Setup & run the Node.js web app
 
 1. Clone this repository:
 
     ```bash
-    git clone https://github.com/mkgareja/tbot.git
+    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
     ```
 
 2. Install Node.js dependencies:
