@@ -12,6 +12,7 @@ const app = express()
 
 const TIE = require('@artificialsolutions/tie-api-client');
 var request = require('request') 
+require('dotenv').config();
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -21,7 +22,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-
+/*
 // load config file
 var nconf = require('nconf')
 nconf.file({ file: 'config.json' }).env()
@@ -37,6 +38,20 @@ var appconfig = {
   teneoURL: nconf.get('TENEO_ENGINE_URL'),
   port: nconf.get('PORT')
 }
+*/
+
+require('dotenv').config();
+// twitter authentication
+var twitter_oauth = {
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  token: process.env.TWITTER_ACCESS_TOKEN,
+  token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+}
+var appconfig = {
+  teneoURL: process.env.TENEO_ENGINE_URL,
+  port: process.env.PORT
+}
 
 const teneoApi = TIE.init(appconfig.teneoURL);
 // Initialize session handler to store mapping between a Twitter UserID and an Engine session ID.
@@ -47,6 +62,11 @@ app.set('port', (appconfig.port || 5000))
 // start server
 const server = app.listen(app.get('port'), function() {
   console.log('Node app is running on port: ', app.get('port'))
+  console.log(twitter_oauth.token)
+  console.log(twitter_oauth.token_secret)
+  console.log(twitter_oauth.consumer_key)
+  console.log(twitter_oauth.consumer_secret)
+
 })
 
 
