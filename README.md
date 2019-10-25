@@ -57,6 +57,8 @@ Next, we need to make the connector available via https. We'll use [ngrok](https
 ## Create a Twitter Webhook Configuration
 A Free Twitter Developer account allows configuring one webhook_url, to receive user events on a web app. Set up a webhook by running this command on the project's root folder:
 
+## WIP specify app.js must be already running on another TERMINAL
+
     node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <https://yoururl.ngrok.io/webhook/twitter>
     
 When succesful, the create-webhook-config command should return a webhook_id.
@@ -122,6 +124,8 @@ WIP: Move this section up, above LOCAL deployment
 
 ## Create a Twitter Webhook Configuration
 Set up a webhook to receive user events on the web app by running this command on the project's root folder:
+
+## WIP specify app.js must be already running on another TERMINAL
 
     node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <your.herokuapp.com/webhook/twitter>
     
