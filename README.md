@@ -32,15 +32,24 @@ In the Account Activity API/Sandbox section, click [Setup Dev Environment](https
 2. Navigate into Permissions > Edit > Access permission section > Enable Read, Write and direct messages.
 3. On the Keys and Tokens tab > Access token & access token secret section > click Create button. Take note of all four keys and tokens.
 
+WIP Local!!
+## Set up ngrok
+WIP
+
 ## Create a Webhook endpoint
 A Free Twitter Developer account allows the creation of one webhook that can be used to receive user events on a web app.
-Set up a webhook with this command on the project's root folder:
+Set up a webhook by running this command on the project's root folder:
 
     ```bash
-    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <url>
+    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <https.your_url.ngrok.io/webhook/twitter>
     ```
-    
-    WIP subscribe to self
+
+## Subscribe to App Owner 
+Subscribe the Account Activity API Environment to listen to activity that happens on the Twitter account that owns the app, such as incoming DMs, tweets, and mentions. 
+
+    ```bash
+    node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment_label>
+    ```
     
     
 ## Setup & run the Node.js web app
