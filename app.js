@@ -142,7 +142,7 @@ app.get('/webhook/twitter', function(request, response) {
 /**
  * Receives Account Acitivity events
  **/
-app.post('/webhook/twitter', async function(request, response) {
+app.post('/webhook/twitter', async function(request, response){
  
   if(!(request.body.direct_message_indicate_typing_events == undefined)){
     console.log("Typing.....")
