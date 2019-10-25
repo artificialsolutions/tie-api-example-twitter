@@ -1,5 +1,5 @@
 {
-  "name": "tie-example-twitter",
+  "name": "tie-api-example-twitter",
   "description": "Sample web app to get started with implementing communication between Twitter and Teneo Engine via Direct Messages",
   "repository": "https://github.com/artificialsolutions/tie-api-example-twitter",
   "keywords": ["teneo", "artificial solutions", "node", "express", "api", "webhook", "twitter"],

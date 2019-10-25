@@ -1,7 +1,7 @@
 {
-  "name": "twitter-webhook-boilerplate-node",
+  "name": "tie-api-example-twitter",
   "version": "1.0.0",
-  "description": "Sample web app and helper scripts to get started with Twitter's Account Activity API",
+  "description": "Example Node.js connector to make your Teneo solution available on Twitter DM chat.",
   "engines": {
     "node": "5.9.1"
   },
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/twitterdev/account-activity-dashboard"
+    "url": "https://github.com/artificialsolutions/tie-api-example-twitter"
   },
   "keywords": [
     "node",
