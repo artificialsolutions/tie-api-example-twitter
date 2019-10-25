@@ -5,19 +5,19 @@
   "keywords": ["teneo", "artificial solutions", "node", "express", "api", "webhook", "twitter"],
     "env": {    
         "TWITTER_CONSUMER_KEY": {
-            "description": "Twitter Consumer Key",
+            "description": "",
             "required":true
         },
         "TWITTER_CONSUMER_SECRET": {
-            "description": "Twitter Consumer Secret key",
+            "description": "",
             "required":true
         },        
         "TWITTER_ACCESS_TOKEN": {
-            "description": "Twitter Access token",
+            "description": "",
             "required":true
         },
         "TWITTER_ACCESS_TOKEN_SECRET": {
-          "description": "Twitter Access Secret token",
+          "description": "",
           "required":true
         },
         "TWITTER_WEBHOOK_ENV": {
