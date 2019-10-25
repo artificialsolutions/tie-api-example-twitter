@@ -32,20 +32,43 @@ In the Account Activity API/Sandbox section, click [Setup Dev Environment](https
 2. Navigate into Permissions > Edit > Access permission section > Enable Read, Write and direct messages.
 3. On the Keys and Tokens tab > Access token & access token secret section > click Create button. Take note of all four keys and tokens.
 
-WIP Local!!
-## Set up ngrok
-WIP
 
-## Create a Webhook endpoint
-A Free Twitter Developer account allows the creation of one webhook that can be used to receive user events on a web app.
+## Connector Setup Instructions
+Two ways of running this connector are described ahead. The first way, is by [running the connector online with Heroku](#running-the-connector-on-heroku). This is the easiest to get the connector running for non-developers since it does not require you to run Node.js or download or modify any code.
+
+The second way is to [run the connector locally](#running-the-connector-locally) or to deploy it on a server of your choice. This is preferred if you're familiar with node.js development and want to have a closer look at the code, or implement modifications and enhancements.
+
+#running-the-connector-locally
+Next, we need to make the connector available via https. We'll use [ngrok](https://ngrok.com) for this.
+
+1. Start ngrok. The connector runs on port 5000 by default, so we need to start ngrok like this:
+    ```
+    ngrok http 5000
+    ```
+2. Running the command above will display a public forwarding https URL. Copy it, we will use it as a `webhook_url` in the final step below.
+3. Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and add the following URL values as whitelisted Callback URLs:
+
+    ```
+    https://webhook_url/callbacks/addsub
+    https://webhook_url/callbacks/addsub
+    https://webhook_url/callbacks/removesub
+    ```
+
+## Create a Twitter Webhook Configuration
+A Free Twitter Developer account allows configuring one `webhook_url`, to receive user events on a web app.
 Set up a webhook by running this command on the project's root folder:
 
     ```bash
-    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <https.your_url.ngrok.io/webhook/twitter>
+    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u           <webhook_url/webhook/twitter>
     ```
+When succesful, the create-webhook-config command should return a webhook_id.
+**Note:** More example scripts can be found in the [example_scripts](example_scripts) directory to:
+    * Create, delete, and retrieve webhook configs.
+    * Add, remove, and list user subscriptions.
 
 ## Subscribe to App Owner 
 Subscribe the Account Activity API Environment to listen to activity that happens on the Twitter account that owns the app, such as incoming DMs, tweets, and mentions. 
+WIP ADD INFO ABOUT ADD/RMV/MOD webhook
 
     ```bash
     node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment_label>
@@ -66,67 +89,16 @@ Subscribe the Account Activity API Environment to listen to activity that happen
     npm install
     ```
 
-3. Create a new `config.json` file based on `config.sample.json` and fill in your Twitter keys, tokens and webhook environment name. Twitter keys and access tokens are found on your app page on [apps.twitter.com](https://apps.twitter.com/). The basic auth properties can be anything you want, and are used for simple password protection to access the configuration UI.
+3. Create a new `config.json` file based on `config.sample.json` and fill in your Twitter keys, tokens and webhook environment name. Twitter keys and access tokens are found on your app page on [apps.twitter.com](https://apps.twitter.com/). 
 
 4. Run locally:
 
     ```bash
     npm start
     ```
+    
+    WIP
 
-5. Deploy app or setup a tunnel to localhost. To deploy to Heroku see "Deploy to Heroku" instructions below. To setup a tunnel use something like [ngrok](https://ngrok.com/).
-
-    Take note of your webhook URL. For example:
-
-    ```text
-    https://your.app.domain/webhook/twitter
-    ```
-
-6. Take note of the deployed URL, revisit your developer.twitter.com Apps **Settings** page, and add the following URL values as whitelisted Callback URLs:
-
-    ```text
-    http(s)://your.app.domain/callbacks/addsub
-    http(s)://your.app.domain/callbacks/removesub
-    ```
-
-## Configure webhook to receive events
-
-To configure your webhook you can use this apps' web UI, or use the example scripts from the command line.
-
-### Using the web UI
-
-Load the web app in your browser and follow the instructions below.
-
-1. Setup webhook config. Navigate to the "manage webhook" view. Enter your webhook URL noted earlier and click "Create/Update."
-
-2. Add a user subscription. Navigate to the "manage subscriptions" view. Click "add" and proceed with Twitter sign-in. Once complete your webhook will start to receive account activity events for the user.
-
-### Using the command line example scripts
-
-These scripts should be executed from root of the project folder. Your environment, url or webhook ID should be passed in as command line arguments.
-
-1. Create webhook config.
-
-    ```bash
-    node example_scripts/webhook_management/create-webhook-config.js -e <environment> -u <url>
-    ```
-
-2. Add a user subscription for the user that owns the app.
-
-    ```bash
-    node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment>
-    ```
-
-3. To add a user subscription for another user using PIN-based Twitter sign-in.
-
-    ```bash
-    node example_scripts/subscription_management/add-subscription-other-user.js -e <environment>
-    ```
-
-**Note:** More example scripts can be found in the [example_scripts](example_scripts) directory to:
-
-* Create, delete, retrieve and validate webhook configs.
-* Add, remove, retrieve, count and list user subscriptions.
 
 ## Deploy to Heroku (optional)
 
