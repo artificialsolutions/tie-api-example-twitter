@@ -2,7 +2,7 @@
 
 Sample web app and helper scripts to get started with Twitter's premium Account Activity API (All Activities). Written in Node.js. Full documentation for this API can be found on developer.twitter.com [here](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/overview).
 
-This Node.js connector acts as a middleware between Teneo bots and Twitter users to implement communication via DM messages. Communication with persisting state and conversational position. The connector uses Twitter's [Account Activity API](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/overview) to detect new Tweet and DM events, without quickly exhausting Twitter's Rate Limit.
+This Node.js connector acts as a middleware that implements communication via Direct Messages between a Teneo bot and Twitter users. Communication with persisting state and conversational position. The connector uses Twitter's [Account Activity API](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/overview) to detect and react to new DM events, without quickly exhausting Twitter's Rate Limit.
 
 
 ## Prerequisites
@@ -25,19 +25,13 @@ Or, to run the connector locally, [ngrok](https://ngrok.com/) is preferred to ma
 
 2. Create a Twitter App [here](https://developer.twitter.com/en/apps/create). Fill in all required fields and tap "Create"
 
-3. Configure you new Twitter App
-
-2. On the **Permissions** tab > **Edit** > **Access permission** section > enable **Read, Write and direct messages**.
-
-3. On the **Keys and Tokens** tab > **Access token & access token secret** section > click **Create** button.
-
-4. On the **Keys and Tokens** tab, take note of the `consumer API key`, `consumer API secret`, `access token` and `access token secret`.
+The configuration of this Twitter app continues ahead.
 
 ## Create a Twitter Account Activity API
-Click [Setup Dev Environment](https://developer.twitter.com/en/account/environments) create a new environment. Link it to the App you created previously and take note of this Environment's na for later use.
+In the Account Activity API/Sandbox section, click [Setup Dev Environment](https://developer.twitter.com/en/account/environments). Link this new environment to the App you created in the previous step and take note of the Environment's Label for later use.
 
 ## Configure the Twitter App
-
+on Account Activity API/Sandbox
 
 
 ## Setup & run the Node.js web app
