@@ -38,7 +38,7 @@ Two ways of running this connector are described ahead. The first way, is by [ru
 
 The second way is to [run the connector locally](#running-the-connector-locally) or to deploy it on a server of your choice. This is preferred if you're familiar with node.js development and want to have a closer look at the code, or implement modifications and enhancements.
 
-#running-the-connector-locally
+# running-the-connector-locally
 Next, we need to make the connector available via https. We'll use [ngrok](https://ngrok.com) for this.
 
 1. Start ngrok. The connector runs on port 5000 by default, so we need to start ngrok like this:
@@ -58,8 +58,8 @@ Next, we need to make the connector available via https. We'll use [ngrok](https
 A Free Twitter Developer account allows configuring one `webhook_url`, to receive user events on a web app.
 Set up a webhook by running this command on the project's root folder:
 
-    ```bash
-    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u           <webhook_url/webhook/twitter>
+    ```
+    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <webhook_url/webhook/twitter>
     ```
 When succesful, the create-webhook-config command should return a webhook_id.
 **Note:** More example scripts can be found in the [example_scripts](example_scripts) directory to:
@@ -70,7 +70,7 @@ When succesful, the create-webhook-config command should return a webhook_id.
 Subscribe the Account Activity API Environment to listen to activity that happens on the Twitter account that owns the app, such as incoming DMs, tweets, and mentions. 
 WIP ADD INFO ABOUT ADD/RMV/MOD webhook
 
-    ```bash
+    ```
     node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment_label>
     ```
     
@@ -79,13 +79,13 @@ WIP ADD INFO ABOUT ADD/RMV/MOD webhook
 
 1. Clone this repository:
 
-    ```bash
+    ```
     git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
     ```
 
 2. Install Node.js dependencies:
 
-    ```bash
+    ```
     npm install
     ```
 
@@ -97,10 +97,29 @@ WIP ADD INFO ABOUT ADD/RMV/MOD webhook
     npm start
     ```
     
-    WIP
+That's it! Send a Twitter DM to you bot, from another Twitter account, and the Teneo bot will send a reply back.
 
 
-## Deploy to Heroku (optional)
+WIP: Move this section up, above LOCAL deployment
+### Running the connector on Heroku
+1. Click the button below to deploy the connector to Heroku:
+
+    [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/artificialsolutions/tie-api-example-twitter.git)
+
+2. In the 'Config Vars' section, add the following:
+    * **NEXMO_API_KEY** Use the `API key value` of your Nexmo account, found in [Settings](https://dashboard.nexmo.com/settings).
+    * **NEXMO_API_SECRET** Use the `API Secret 1`, also found in [Settings](https://dashboard.nexmo.com/settings).
+    * **NEXMO_NUMBER** Use the Virtual Phone Number found [here](https://dashboard.nexmo.com/your-numbers) purchased previously, in E.164 format. 
+    * **TENEO_ENGINE_URL:** The engine url of your bot.
+3. Click on 'Deploy App', and wait for Heroku to complete the deployment. Click 'View' to see your new Heroku's app URL. Copy it, we will use it as a `Incoming Webhook URL` in the next step.
+4. In your Nexmo account's dashboard, [navigate](https://dashboard.nexmo.com/your-numbers) to the Virtual Phone Number you purchased in the previous step, and click on `Manage`. Paste the url of your heroku app in the `Inbound Webhook URL` field and append it will `/teneochat`. The final url should look something like: https://yourherokuapp.herokuapp.com/teneochat.
+
+That's it! Text your Virtual Phone Number with a mobile phone, and the Teneo bot will send an SMS reply!
+
+
+
+
+## Deploy to Heroku (optional)//PREVIOUS
 
 1. Init Heroku app.
 
