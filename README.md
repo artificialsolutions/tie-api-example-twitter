@@ -38,68 +38,6 @@ Two ways of running this connector are described ahead. The first way, is by [ru
 
 The second way is to [run the connector locally](#running-the-connector-locally) or to deploy it on a server of your choice. This is preferred if you're familiar with node.js development and want to have a closer look at the code, or implement modifications and enhancements.
 
-# running-the-connector-locally
-Next, we need to make the connector available via https. We'll use [ngrok](https://ngrok.com) for this.
-
-1. Start ngrok. The connector runs on port 5000 by default, so we need to start ngrok like this:
-    ```
-    ngrok http 5000
-    ```
-2. Running the command above will display a public forwarding https URL. Copy it, we will use it as a `webhook_url` in the final step below.
-
-3. Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and add the following URL values as whitelisted Callback URLs:
-
-    ```
-    https://yoururl.ngrok.io/webhook/twitter
-    https://yoururl.ngrok.io/callbacks/addsub
-    https://yoururl.ngrok.io/callbacks/removesub
-    ```
-## Create a Twitter Webhook Configuration
-A Free Twitter Developer account allows configuring one webhook_url, to receive user events on a web app. Set up a webhook by running this command on the project's root folder:
-
-## WIP specify app.js must be already running on another TERMINAL
-
-    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <https://yoururl.ngrok.io/webhook/twitter>
-    
-When succesful, the create-webhook-config command should return a webhook_id.
-**Note:** More example scripts can be found in the [example_scripts](example_scripts) directory to:
-    * Create, delete, and retrieve webhook configs.
-    * Add, remove, and list user subscriptions.
-
-
-## Subscribe to App Owner 
-Subscribe the Account Activity API Environment to listen to activity that happens on the Twitter account that owns the app, such as incoming DMs, tweets, and mentions. 
-WIP ADD INFO ABOUT ADD/RMV/MOD webhook
-
-    node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment_label>
-    
-    
-## Setup & run the Node.js web app
-
-1. Clone this repository:
-
-    ```
-    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
-    ```
-
-2. Install Node.js dependencies:
-
-    ```
-    npm install
-    ```
-
-3. Create a new `config.json` file based on `config.sample.json` and fill in your Twitter keys, tokens and webhook environment name. Twitter keys and access tokens are found on your app page on [apps.twitter.com](https://apps.twitter.com/). 
-
-4. Run locally:
-
-    ```bash
-    npm start
-    ```
-    
-That's it! Send a Twitter DM to you bot, from another Twitter account, and the Teneo bot will send a reply back.
-
-
-WIP: Move this section up, above LOCAL deployment
 ### Running the connector on Heroku
 1. Click the button below to deploy the connector to Heroku:
 
@@ -123,12 +61,78 @@ WIP: Move this section up, above LOCAL deployment
     ```
 
 ## Create a Twitter Webhook Configuration
-Set up a webhook to receive user events on the web app by running this command on the project's root folder:
+Open Heroku's command console by tapping "More > Run Console", from the upper right area in the Dashboard.
+Set up a webhook to receive user events on the web app by running this command on Heroku´s console:
 
-## WIP specify app.js must be already running on another TERMINAL
-
-    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <your.herokuapp.com/webhook/twitter>
+    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <https://yoururl.ngrok.io/webhook/twitter>
     
+When succesful, the create-webhook-config command should return a webhook_id.
+**Note:** More example scripts can be found in the [example_scripts](example_scripts) directory to:
+    * Create, delete, and retrieve webhook configs.
+    * Add, remove, and list user subscriptions.
+    
+## Subscribe to App Owner 
+To listen to events such as Tweets, mentions and Direct messages, subscribe to the Account Activity API Environment by running the following command on Heroku's command line:
+
+    node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment_label>
+    
+    
+That's it! Send a Twitter DM to you bot, from another Twitter account, and the Teneo bot will send a reply back.
+
+**Note:** The free tier of Heroku will put your app to sleep after 30 minutes. On cold start, you app will have very high latency which may result in a CRC failure that deactivates your webhook. To trigger a challenge response request and re-validate, run the following script.
+
+    node example_scripts/webhook_management/validate-webhook-config.js -e <environment> -i <webhook_id>
+    
+    
+# running-the-connector-locally
+Next, we need to make the connector available via https. We'll use [ngrok](https://ngrok.com) for this.
+
+1. Start ngrok. The connector runs on port 5000 by default, so we need to start ngrok like this:
+    ```
+    ngrok http 5000
+    ```
+2. Running the command above will display a public forwarding https URL. Copy it, we will use it as a `webhook_url` in the final step below.
+
+3. Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and add the following URL values as whitelisted Callback URLs:
+
+    ```
+    https://yoururl.ngrok.io/webhook/twitter
+    https://yoururl.ngrok.io/callbacks/addsub
+    https://yoururl.ngrok.io/callbacks/removesub
+    ```
+    
+    
+## Setup & run the Node.js web app
+
+1. Clone this repository:
+
+    ```
+    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
+    ```
+
+2. Install Node.js dependencies:
+
+    ```
+    npm install
+    ```
+
+3. Create a new file called `.env` based on `.env.sample` and fill in your Twitter keys, tokens, Teneo Engine URL and webhook environment name. Twitter keys and access tokens are found on your app page on [apps.twitter.com](https://apps.twitter.com/). 
+
+4. Run locally:
+
+    ```bash
+    npm start
+    ```
+
+## Create a Twitter Webhook Configuration
+A Free Twitter Developer account allows configuring one webhook_url, to receive user events on a web app.
+Keep the web app from the previous step running in one console window, and then open a second console window to create a webhook, with the following command:
+
+    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <https://yoururl.ngrok.io/webhook/twitter>
+    
+When succesful, the create-webhook-config command should return a webhook_id.
+
+
 ## Subscribe to App Owner 
 Subscribe the Account Activity API Environment to listen to activity that happens on the Twitter account that owns the app, such as incoming DMs, tweets, and mentions. 
 WIP ADD INFO ABOUT ADD/RMV/MOD webhook
@@ -139,13 +143,6 @@ WIP ADD INFO ABOUT ADD/RMV/MOD webhook
 That's it! Send a Twitter DM to you bot, from another Twitter account, and the Teneo bot will send a reply back.
 
 
-
-**Note:** The free tier of Heroku will put your app to sleep after 30 minutes. On cold start, you app will have very high latency which may result in a CRC failure that deactivates your webhook. To trigger a challenge response request and re-validate, run the following script.
-
-    node example_scripts/webhook_management/validate-webhook-config.js -e <environment> -i <webhook_id>
-    
-
 ## Production considerations
-
-This app is for demonstration purposes only, and should not be used in production without further modifcations. The application can handle light usage, but you may experience API rate limit issues under heavier load. Consider storing data locally in a secure database, caching requests, or applying for a business account for increased Rate Limits.
+This app is for demonstration purposes only. The application can handle light usage, but you may experience API rate limit issues under heavier load. Consider storing data locally in a secure database, caching requests, or applying for a business account for increased Rate Limits.
 
