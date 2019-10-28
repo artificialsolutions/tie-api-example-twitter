@@ -103,7 +103,7 @@ WIP: Move this section up, above LOCAL deployment
 ### Running the connector on Heroku
 1. Click the button below to deploy the connector to Heroku:
 
-    [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/artificialsolutions/tie-api-example-twitter.git)
+    [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/artificialsolutions/tie-api-example-twitter)
 
 2. In the 'Config Vars' section, add the following:
     * **TWITTER_CONSUMER_KEY** [Your app Details](https://developer.twitter.com/en/apps/) > 'Keys and Tokens' Tab
