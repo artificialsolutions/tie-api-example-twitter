@@ -32,9 +32,9 @@ In the Account Activity API/Sandbox section, click [Setup Dev Environment](https
 
 
 ## Connector Setup Instructions
-Two ways of running this connector are described ahead. The first metod, is [running the connector online with Heroku](###running-the-connector-on-heroku). This is the easiest to get the connector running for non-developers since it does not require you to run Node.js or download or modify any code.
+Two ways of running this connector are described ahead. The first metod, is [running the connector online with Heroku](### Running the connector on Heroku). This is the easiest to get the connector running for non-developers since it does not require you to run Node.js or download or modify any code.
 
-The second way is [running the connector locally](###running-the-connector-locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
+The second way is [running the connector locally](### Running the Connector Locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
 
 ### Running the connector on Heroku
 1. Click the button below to deploy the connector to Heroku:
@@ -82,7 +82,7 @@ That's it! Send a Twitter DM to you bot, from another Twitter account, and the T
     node example_scripts/webhook_management/validate-webhook-config.js -e <environment> -i <webhook_id>
     
     
-### running-the-connector-locally
+### Running the Connector Locally
 Next, we need to make the connector available via https. We'll use [ngrok](https://ngrok.com) for this.
 
 1. Start ngrok. The connector runs on port 5000 by default, so we need to start ngrok like this:
