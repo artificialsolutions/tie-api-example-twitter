@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Example Node.js connector to make your Teneo solution available on Twitter DM chat.",
   "engines": {
-    "node": "5.9.1"
+    "node": "10.15.1"
   },
   "main": "index.js",
   "scripts": {
