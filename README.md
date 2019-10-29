@@ -42,12 +42,12 @@ The second way is [Running the connector locally](#running-the-connector-locally
     [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/artificialsolutions/tie-api-example-twitter)
 
 2. In the 'Config Vars' section, fill the following values:
-    * **TWITTER_CONSUMER_KEY** [Your app Details](https://developer.twitter.com/en/apps/) > 'Keys and Tokens' Tab
+    * **TWITTER_CONSUMER_KEY**: [Your app Details](https://developer.twitter.com/en/apps/) > 'Keys and Tokens' Tab
     * **TWITTER_CONSUMER_SECRET** 
     * **TWITTER_ACCESS_TOKEN** 
     * **TWITTER_ACCESS_TOKEN_SECRET**
-    * **TWITTER_WEBHOOK_ENV** `environment_label` from [here](https://developer.twitter.com/en/account/environments)
-    * **TENEO_ENGINE_URL:** The Engine URL of your bot.
+    * **TWITTER_WEBHOOK_ENV**: `environment_label` from [here](https://developer.twitter.com/en/account/environments)
+    * **TENEO_ENGINE_URL**: The Engine URL of your bot.
 3. Click on 'Deploy App', and wait for Heroku to complete the deployment. Click 'View' to see your new Heroku's app URL. Copy it, we will use it as a `webhook_url` in the next step.
 
 4. Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and add the following URL values as whitelisted Callback URLs:
@@ -131,7 +131,6 @@ When succesful, the create-webhook-config command should return a webhook_id.
 
 #### Subscribe to App Owner 
 Subscribe the Account Activity API Environment to listen to activity that happens on the Twitter account that owns the app, such as incoming DMs, tweets, and mentions. 
-WIP ADD INFO ABOUT ADD/RMV/MOD webhook
 
     node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment_label>
     
