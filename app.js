@@ -18,11 +18,13 @@ OAuth= require('oauth').OAuth
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize());
+/*
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true
 }))
+*/
 
 require('dotenv').config();
 // twitter authentication
@@ -48,11 +50,6 @@ app.set('port', (appconfig.port || 5000))
 const server = app.listen(app.get('port'), function() {
   console.log('Node app is running on port: ', app.get('port'))
   initTwitterOauth()
-  console.log(twitter_oauth.token)
-  console.log(twitter_oauth.token_secret)
-  console.log(twitter_oauth.consumer_key)
-  console.log(twitter_oauth.consumer_secret)
-
 })
 
 
@@ -111,7 +108,7 @@ function initTwitterOauth() {
   );
 }
 
-// OAuth authentication with token and secret is necessary to tweet
+// Use OAuth authentication with token and secret to tweet
 // https://dev.twitter.com/docs/api/1/post/statuses/update
 function makeTweet(replyToTweetID, newTweetText, cb) {
   oa.post(
@@ -183,13 +180,12 @@ app.post('/webhook/twitter', async function(request, response){
         //console.log(`TWEET EVENT.BODY: ${JSON.stringify(request.body)}`)
         if(inReplyToTweetID){  //User replied to one of your bot's tweet
           console.log(`*Tweet Reply Event`)
-          console.log(`User ${senderUserID} replied to your bot, on a tweet with ID:${replyToTweetID} `);
+          console.log(`User ${senderUserID} replied to your bot, on a tweet with ID:${replyToTweetID}: ${tweetText}`);
         }
         else{ //User mentioned your bot
           console.log(`*Tweet Mention Event`)
-          console.log(`User ${senderUserID} mentioned your bot on his timeline, tweetID: ${tweetID}:`)
+          console.log(`User ${senderUserID} mentioned your bot on his timeline, tweetID: ${tweetID}: ${tweetText}`)
         }
-        console.log(tweetText) 
 
         // Check if we have stored an engine sessionid for this user
         const teneoSessionId = sessionHandler.getSession(senderUserID);
@@ -203,14 +199,14 @@ app.post('/webhook/twitter', async function(request, response){
         // Send TIE's response to the user via DM
         // The tweet must include a mention to the target user
         var tweetResponse = "@"+tweetEvent.user.screen_name+" "+teneoResponse.output.text
-        console.log(`TWEET THIS: ${tweetResponse}`)
+        console.log(`Teneo bot reply: ${tweetResponse}`)
 
         makeTweet(replyToTweetID, tweetResponse, function (error, data) {
           if(error) {
             console.log(require('sys').inspect(error));
           } else {
-            console.log(data);
-            console.log('go check your tweets!');
+            //console.log(data);
+            console.log('[Twitter timeline has been updated]');
           }
         });
       }
@@ -224,7 +220,7 @@ app.post('/webhook/twitter', async function(request, response){
     
         const senderUserID = directMessageEvent.message_create.sender_id
         const sourceAppID = directMessageEvent.message_create.source_app_id
-        const messageText = directMessageEvent.message_create.message_data.text
+        const messageText = directMessageEvent.message_create.message_data.text    
 
         // The www.your.domain/Webhook/twitter endpoint is used to SEND, as well as to RECEIVE DMs.
         // SourceAppID becomes "undefined" when the "message_create" event originated 
@@ -232,11 +228,13 @@ app.post('/webhook/twitter', async function(request, response){
         // If that is the case, relay the user's input to Teneo engine for processing.
         if(sourceAppID == undefined){
 
+          console.log(`DM user ${senderUserID}: ${messageText}`)
           const teneoSessionId = sessionHandler.getSession(senderUserID);
           const teneoResponse = await teneoApi.sendInput(teneoSessionId, { 'text': messageText, 'channel': 'twitter-dm', 'senderTwitterID': senderUserID});
           sessionHandler.setSession(senderUserID, teneoResponse.sessionId);
 
           // Send TIE's response to the user via DM
+          console.log(`DM Teneo bot: ${teneoResponse.output.text}`)
           sendDM(senderUserID, teneoResponse.output.text)
         }
       }
