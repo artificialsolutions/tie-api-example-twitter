@@ -1,5 +1,5 @@
 # tie-api-example-twitter
-This Node.js connector enables communication between a Teneo bot and Twitter users via Direct Messages and Tweets. The connector uses Twitter's [Account Activity API](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/overview) to detect and react to incoming Direct Messages and Tweet mentions, without quickly exhausting Twitter's Rate Limit.
+This Node.js connector enables communication between a Teneo bot and Twitter users via Direct Messages and Tweets. The connector uses Twitter's [Account Activity API](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/overview) to detect and react to incoming Direct Messages and Tweets, without quickly exhausting Twitter's Rate Limit.
 
 
 ## Prerequisites
@@ -74,8 +74,7 @@ To listen to events such as Tweet mentions and Direct messages, subscribe to the
 
     node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment_label>
     
-    
-That's it! Send a Twitter DM to you bot, from another Twitter account, and the Teneo bot will send a reply back.
+That's it! You can now interact with your Teneo solution powered bot with Direct Messages, Tweet mentions, and Tweet replies.
 
 **Note:** The free tier of Heroku will put your app to sleep after 30 minutes. On cold start, you app will have very high latency which may result in a CRC failure that deactivates your webhook. To trigger a challenge response request and re-validate, run the following script.
 
@@ -135,7 +134,7 @@ Subscribe the Account Activity API Environment to listen to activity that happen
     node example_scripts/subscription_management/add-subscription-app-owner.js -e <environment_label>
     
     
-That's it! Send a Twitter DM to you bot, from another Twitter account, and the Teneo bot will send a reply back.
+That's it! You can now interact with your Teneo solution powered bot with Direct Messages, Tweet mentions, and Tweet replies.
 
 
 ## Production considerations
