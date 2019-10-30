@@ -13,6 +13,7 @@ const app = express()
 const TIE = require('@artificialsolutions/tie-api-client');
 var request = require('request') 
 require('dotenv').config();
+OAuth= require('oauth').OAuth
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -22,23 +23,6 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-/*
-// load config file
-var nconf = require('nconf')
-nconf.file({ file: 'config.json' }).env()
-
-// twitter authentication
-var twitter_oauth = {
-  consumer_key: nconf.get('TWITTER_CONSUMER_KEY'),
-  consumer_secret: nconf.get('TWITTER_CONSUMER_SECRET'),
-  token: nconf.get('TWITTER_ACCESS_TOKEN'),
-  token_secret: nconf.get('TWITTER_ACCESS_TOKEN_SECRET')
-}
-var appconfig = {
-  teneoURL: nconf.get('TENEO_ENGINE_URL'),
-  port: nconf.get('PORT')
-}
-*/
 
 require('dotenv').config();
 // twitter authentication
@@ -54,6 +38,7 @@ var appconfig = {
 }
 
 const teneoApi = TIE.init(appconfig.teneoURL);
+
 // Initialize session handler to store mapping between a Twitter UserID and an Engine session ID.
 const sessionHandler = SessionHandler();
 
@@ -62,6 +47,7 @@ app.set('port', (appconfig.port || 5000))
 // start server
 const server = app.listen(app.get('port'), function() {
   console.log('Node app is running on port: ', app.get('port'))
+  initTwitterOauth()
   console.log(twitter_oauth.token)
   console.log(twitter_oauth.token_secret)
   console.log(twitter_oauth.consumer_key)
@@ -99,15 +85,44 @@ function getDirectMessageRequestOptions(recipientID, messageText){
   return requestOptions
 }
 
-
 function sendDM(recipientID, messageText){
-    // POST request to send Direct Message
+  // POST request to send Direct Message
   request.post(getDirectMessageRequestOptions(recipientID, messageText), function (error, response, body) {
     if(error){
       console.log(error)
     }
   })
 }
+
+
+OAuth= require('oauth').OAuth
+var oa
+
+// We init OAuth with our consumer key & secret just like with passport
+function initTwitterOauth() {
+  oa = new OAuth(
+    "https://twitter.com/oauth/request_token"
+  , "https://twitter.com/oauth/access_token"
+  , twitter_oauth.consumer_key
+  , twitter_oauth.consumer_secret
+  , "1.0A"
+  , "https://f48be735.ngrok.io" + ":" + "5000" + "/authn/twitter/callback"
+  , "HMAC-SHA1"
+  );
+}
+
+// OAuth authentication with token and secret is necessary to tweet
+// https://dev.twitter.com/docs/api/1/post/statuses/update
+function makeTweet(replyToTweetID, newTweetText, cb) {
+  oa.post(
+    "https://api.twitter.com/1.1/statuses/update.json"
+  , twitter_oauth.token
+  , twitter_oauth.token_secret
+  , { "status": newTweetText, "in_reply_to_status_id": replyToTweetID }
+  , cb
+  );
+}
+
 
 
 // initialize socket.io
@@ -149,20 +164,65 @@ app.post('/webhook/twitter', async function(request, response){
   }
   else{
 
-    //Detect when account tweets
+    //Detect Tweet replies and mentions
     if(request.body.tweet_create_events){
-      var tweetEvent = request.body.tweet_create_events[0]
-      console.log(tweetEvent)
-      console.log(tweetEvent.user.id)
-      console.log(`Timeline Activity: ${tweetEvent.text}`)
-    }
+      
+      const tweetEvent = request.body.tweet_create_events[0]
+      const senderUserID = tweetEvent.user.id
+      const forUserID = request.body.for_user_id
+
+      if(!(senderUserID==forUserID)){  //make sure the bot doesn't reply to its own messages.
+        const tweetID = tweetEvent.id
+        const inReplyToTweetID = tweetEvent.in_reply_to_status_id_str
+        const replyToTweetID = tweetEvent.id_str //id of the incoming tweet where your bot was mentioned
+        
+        var tweetText = tweetEvent.text
+        tweetText = tweetText.replace('@'+tweetEvent.in_reply_to_screen_name,"") //trim @mention from user text
+
+        //console.log(`TWEET EVENT: ${JSON.stringify(tweetEvent)}`)
+        //console.log(`TWEET EVENT.BODY: ${JSON.stringify(request.body)}`)
+        if(inReplyToTweetID){  //User replied to one of your bot's tweet
+          console.log(`*Tweet Reply Event`)
+          console.log(`User ${senderUserID} replied to your bot, on a tweet with ID:${replyToTweetID} `);
+        }
+        else{ //User mentioned your bot
+          console.log(`*Tweet Mention Event`)
+          console.log(`User ${senderUserID} mentioned your bot on his timeline, tweetID: ${tweetID}:`)
+        }
+        console.log(tweetText) 
+
+        // Check if we have stored an engine sessionid for this user
+        const teneoSessionId = sessionHandler.getSession(senderUserID);
+
+        // Send the user's input from the DM to Teneo, and obtain a response.
+        const teneoResponse = await teneoApi.sendInput(teneoSessionId, { 'text': tweetText, 'channel': 'twitter-tweet', 'twitterSenderID': senderUserID, 'tweetID': replyToTweetID});
+
+        // Stored engine sessionid for this caller
+        sessionHandler.setSession(senderUserID, teneoResponse.sessionId);
+
+        // Send TIE's response to the user via DM
+        // The tweet must include a mention to the target user
+        var tweetResponse = "@"+tweetEvent.user.screen_name+" "+teneoResponse.output.text
+        console.log(`TWEET THIS: ${tweetResponse}`)
+
+        makeTweet(replyToTweetID, tweetResponse, function (error, data) {
+          if(error) {
+            console.log(require('sys').inspect(error));
+          } else {
+            console.log(data);
+            console.log('go check your tweets!');
+          }
+        });
+      }
+    }//end tweet_create_events
+
 
     //Detect incoming and outgoing DM events
     if(request.body.direct_message_events){
       var directMessageEvent = request.body.direct_message_events[0]
       if(directMessageEvent.type == "message_create"){
     
-        const twitterSenderID = directMessageEvent.message_create.sender_id
+        const senderUserID = directMessageEvent.message_create.sender_id
         const sourceAppID = directMessageEvent.message_create.source_app_id
         const messageText = directMessageEvent.message_create.message_data.text
 
@@ -172,25 +232,15 @@ app.post('/webhook/twitter', async function(request, response){
         // If that is the case, relay the user's input to Teneo engine for processing.
         if(sourceAppID == undefined){
 
-          console.log(`User: ${messageText}`)
-          // Check if we have stored an engine sessionid for this user
-          const teneoSessionId = sessionHandler.getSession(twitterSenderID);
-
-          // Send the user's input from the DM to Teneo, and obtain a response.
-          const teneoResponse = await teneoApi.sendInput(teneoSessionId, { 'text': messageText, 'channel': 'twitter-dm', 'phoneNumber': twitterSenderID});
-
-          // Stored engine sessionid for this caller
-          sessionHandler.setSession(twitterSenderID, teneoResponse.sessionId);
+          const teneoSessionId = sessionHandler.getSession(senderUserID);
+          const teneoResponse = await teneoApi.sendInput(teneoSessionId, { 'text': messageText, 'channel': 'twitter-dm', 'senderTwitterID': senderUserID});
+          sessionHandler.setSession(senderUserID, teneoResponse.sessionId);
 
           // Send TIE's response to the user via DM
-          sendDM(twitterSenderID, teneoResponse.output.text)
-        }
-        else{
-          console.log(`Bot: ${messageText}`)
+          sendDM(senderUserID, teneoResponse.output.text)
         }
       }
     }
-    
   }
   
   socket.io.emit(socket.activity_event, {
@@ -247,7 +297,6 @@ app.get('/callbacks/:action', passport.authenticate('twitter', { failureRedirect
 /***
  * SESSION HANDLER
  ***/
-
 function SessionHandler() {
 
   // Map a Twitter UserID to the Teneo Engine Session ID.
@@ -267,5 +316,5 @@ function SessionHandler() {
     setSession: (userId, sessionId) => {
       sessionMap.set(userId, sessionId)
     }
-  };
+  }
 }

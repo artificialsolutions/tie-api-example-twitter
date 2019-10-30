@@ -1,7 +1,7 @@
 {
   "name": "tie-api-example-twitter",
   "version": "1.0.0",
-  "description": "Example Node.js connector to make your Teneo solution available on Twitter DM chat.",
+  "description": "Example Node.js connector that implements communication between a Teneo solution and Twitter users via Direct Messages and Tweets.",
   "engines": {
     "node": "10.15.1"
   },

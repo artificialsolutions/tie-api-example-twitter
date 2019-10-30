@@ -24,7 +24,7 @@ request.get(request_options).then( function (body) {
     resolveWithFullResponse: true
   }
 
-  // DELETE request to delete webhook config
+  // Request to delete webhook config
   return request.delete(request_options)
 
 }).then(function (response) {

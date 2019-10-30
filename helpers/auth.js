@@ -1,4 +1,3 @@
-//const nconf = require('nconf')
 const request = require('request')
 const queryString = require('query-string')
 const passport = require('passport')
@@ -6,20 +5,8 @@ const TwitterStrategy = require('passport-twitter')
 const httpAuth = require('http-auth')
 require('dotenv').config();
 
-// load config
-//nconf.file({ file: 'config.json' }).env()
-
 var auth = {}
-/*
-// twitter info
-auth.twitter_oauth = {
-  consumer_key: nconf.get('TWITTER_CONSUMER_KEY'),
-  consumer_secret: nconf.get('TWITTER_CONSUMER_SECRET'),
-  token: nconf.get('TWITTER_ACCESS_TOKEN'),
-  token_secret: nconf.get('TWITTER_ACCESS_TOKEN_SECRET')
-}
-auth.twitter_webhook_environment = nconf.get('TWITTER_WEBHOOK_ENV')
-*/
+
 auth.twitter_oauth = {
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -32,8 +19,6 @@ auth.twitter_webhook_environment = process.env.TWITTER_WEBHOOK_ENV
 auth.basic = httpAuth.connect(httpAuth.basic({
     realm: 'admin-dashboard'
 }, function(username, password, callback) {
-    console.log("SEEKING USER")
-    //callback(username == nconf.get('BASIC_AUTH_USER') && password == nconf.get('BASIC_AUTH_PASSWORD'))
     callback(username == process.env.BASIC_AUTH_USER && password == process.env.BASIC_AUTH_PASSWORD)
 }))
 
@@ -74,9 +59,7 @@ passport.deserializeUser(function(obj, cb) {
  * Retrieves a Twitter Sign-in auth URL for OAuth1.0a
  */
 auth.get_twitter_auth_url = function (host, callback_action) {
-  //console.log(`TWITTER_CONSUMER_KEY ${nconf.get('TWITTER_CONSUMER_KEY')}`)
-  console.log(`TWITTER_CONSUMER_KEY ${process.env.TWITTER_CONSUMER_KEY}`)
-  // construct request to retrieve authorization token
+
   var request_options = {
     url: 'https://api.twitter.com/oauth/request_token',
     method: 'POST',
@@ -140,13 +123,11 @@ auth.get_twitter_bearer_token = function () {
       }
       else {
         var json_body = JSON.parse(response.body)
-        console.log("Bearer Token:", json_body.access_token)
         auth.twitter_bearer_token = json_body.access_token
         resolve(auth.twitter_bearer_token)
       }
     })
   })
 }
-
 
 module.exports = auth
