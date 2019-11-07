@@ -62,7 +62,7 @@ The second way is [Running the connector locally](#running-the-connector-locally
 Open Heroku's command console by tapping "More > Run Console", from the upper right area in the Dashboard.
 Set up a webhook to receive user events on the web app by running this command on Heroku´s console:
 
-    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <https://yoururl.ngrok.io/webhook/twitter>
+    node example_scripts/webhook_management/create-webhook-config.js -e <environment_label> -u <https://youbotname.herokuapp.com/webhook/twitter>
     
 When succesful, the create-webhook-config command should return a webhook_id.
 **Note:** More example scripts can be found in the [example_scripts](example_scripts) directory:
