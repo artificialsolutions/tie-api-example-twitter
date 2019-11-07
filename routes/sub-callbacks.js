@@ -1,5 +1,4 @@
 const request = require('request-promise')
-const passport = require('passport')
 const auth = require('../helpers/auth.js')
 
 

@@ -1,5 +1,3 @@
-const request = require('request-promise')
-const auth = require('../helpers/auth')
 const socket = require('../helpers/socket')
 
 

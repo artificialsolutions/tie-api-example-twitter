@@ -1,5 +1,4 @@
 const socketIO = require('socket.io')
-const http = require('http')
 const uuid = require('uuid/v4')
 
 

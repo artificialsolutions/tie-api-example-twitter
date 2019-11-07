@@ -1,9 +1,7 @@
 const request = require('request-promise')
 const auth = require('../helpers/auth.js')
 
-
 var webhook = {}
-
 
 /**
  * Retrieves existing webhook config and renders
