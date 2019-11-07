@@ -21,7 +21,6 @@
     "memory-cache": "^0.2.0",
     "passport": "^0.4.0",
     "passport-twitter": "^1.0.4",
-    "prompt-promise": "^1.0.3",
     "query-string": "^5.0.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
@@ -38,7 +37,9 @@
     "heroku",
     "express",
     "webhook",
-    "twitter"
+    "twitter",
+    "tweet",
+    "DM"
   ],
-  "license": "MIT"
+  "license": "Apache-2.0"
 }

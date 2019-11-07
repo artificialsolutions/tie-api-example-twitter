@@ -16,13 +16,7 @@ OAuth= require('oauth').OAuth
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize());
-/*
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true
-}))
-*/
+
 
 require('dotenv').config();
 // twitter authentication
