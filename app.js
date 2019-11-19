@@ -89,13 +89,21 @@ var oa
 
 // We init OAuth with our consumer key & secret just like with passport
 function initTwitterOauth() {
+
+  //Generate random 'nonce' string for this request
+  var nonce = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for(var i = 0; i < 32; i++) {
+    nonce += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
   oa = new OAuth(
     "https://twitter.com/oauth/request_token"
   , "https://twitter.com/oauth/access_token"
   , twitter_oauth.consumer_key
   , twitter_oauth.consumer_secret
   , "1.0A"
-  , "https://f48be735.ngrok.io" + ":" + "5000" + "/authn/twitter/callback"
+  , nonce
   , "HMAC-SHA1"
   );
 }
