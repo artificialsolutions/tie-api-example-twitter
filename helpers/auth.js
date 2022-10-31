@@ -1,7 +1,7 @@
 const request = require('request')
 const queryString = require('query-string')
 const passport = require('passport')
-const TwitterStrategy = require('passport-twitter')
+const TwitterStrategy = require('passport-twitter').Strategy
 const httpAuth = require('http-auth')
 require('dotenv').config();
 
