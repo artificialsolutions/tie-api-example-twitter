@@ -1,11 +1,11 @@
 const request = require('request-promise')
-const auth = require('../../helpers/auth.js')
-const args = require('../args.js')
+const auth = require('../helpers/auth.js')
+const args = require('./args.js')
 
 
-// request options we get the mentions
+// request options we will get the direct messages first
 var request_options = {
-  url: 'https://api.twitter.com/1.1/statuses/mentions_timeline.json',
+  url: 'https://api.twitter.com/1.1/direct_messages/events/list.json',
   oauth: auth.twitter_oauth
 }
 
