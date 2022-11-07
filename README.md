@@ -14,6 +14,8 @@ You will need to apply for a Twitter Developer Account and then create a Twitter
 
 ### HTTPS
 
+An Azure account with an active subscription is required. [Create an account for free](https://azure.microsoft.com/free/?utm_source=campaign&utm_campaign=vscode-tutorial-app-service-extension&mktingSource=vscode-tutorial-app-service-extension).
+
 To run the connector locally, [ngrok](https://ngrok.com/) is preferred to make the connector available via HTTPS.
 
 ## GETTING STARTED
@@ -36,10 +38,77 @@ In the Account Activity API/Sandbox section, click [Setup Dev Environment](https
 
 ## Connector Setup Instructions
 
-One way of running this connector is described ahead.
-[Running the connector locally](#running-the-connector-locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
+There are some ways of running this connector are described ahead.
+You can run the connector online with Azure.
+You can [Run the connector locally](#running-the-connector-locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
 
-### Running the connector locally
+### Running the connector with Azure
+
+# Install with Visual Studio Code
+
+- Have [Visual Studio Code](https://code.visualstudio.com/) installed.
+- The [Azure App Service extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureappservice) for Visual Studio Code.
+ <!-- - <a href="https://git-scm.com/" target="_blank">Install Git</a> -->
+- In Visual Studio Code, in the [Activity Bar](https://code.visualstudio.com/docs/getstarted/userinterface), select the **Azure** logo.
+- In the **App Service** explorer, select **Sign in to Azure...** and follow the instructions.
+
+    In Visual Studio Code, you should see your Azure email address in the Status Bar and your subscription in the **AZURE APP SERVICE** explorer.
+
+    ![sign in to Azure](./media/sign-in.png)
+
+#### Configure the App Service app and deploy code
+
+1. Select your application folder.
+
+# Deploy to Linux
+
+2. Right-click on App Services and select **Create new Web App**. A Linux container is used by default.
+1. Type a globally unique name for your web app and press **Enter**. The name must be unique across all of Azure and use only alphanumeric characters ('A-Z', 'a-z', and '0-9') and hyphens ('-').
+1. In Select a runtime stack, select the Node.js version you want. An **LTS** version is recommended.
+1. In Select a pricing tier, select **Free (F1)** and wait for the resources to be provisioned in Azure.
+1. In the popup **Always deploy the workspace "myApp" to \<app-name>"**, select **Yes**. This way, as long as you're in the same workspace, Visual Studio Code deploys to the same App Service app each time.
+
+    While Visual Studio Code provisions the Azure resources and deploys the code, it shows [progress notifications](https://code.visualstudio.com/api/references/extension-guidelines#notifications).
+
+# Deploy to Windows
+
+2. Right-click on App Services and select **Create new Web App... Advanced**.
+1. Type a globally unique name for your web app and press **Enter**. The name must be unique across all of Azure and use only alphanumeric characters ('A-Z', 'a-z', and '0-9') and hyphens ('-').
+1. Select **Create a new resource group**, then enter a name for the resource group, such as *AppServiceQS-rg*.
+1. Select the Node.js version you want. An **LTS** version is recommended.
+1. Select **Windows** for the operating system.
+1. Select the location you want to serve your app from. For example, *West Europe*.
+1. Select **Create new App Service plan**, then enter a name for the plan (such as *AppServiceQS-plan*), then select **F1 Free** for the pricing tier.
+1. For **Select an Application Insights resource for your app**, select **Skip for now** and wait the resources to be provisioned in Azure.
+1. In the popup **Always deploy the workspace "myApp" to \<app-name>"**, select **Yes**. This way, as long as you're in the same workspace, Visual Studio Code deploys to the same App Service app each time.
+
+    While Visual Studio Code provisions the Azure resources and deploys the code, it shows [progress notifications](https://code.visualstudio.com/api/references/extension-guidelines#notifications).
+
+    > [!NOTE]
+    > When deployment completes, your Azure app doesn't run yet because your project root doesn't have a *web.config*. Follow the remaining steps to generate it automatically. For more information, see [You do not have permission to view this directory or page](configure-language-nodejs.md#you-do-not-have-permission-to-view-this-directory-or-page).
+
+1. In the **App Service** explorer in Visual Studio code, expand the node for the new app, right-click **Application Settings**, and select **Add New Setting**:
+
+    ![Add app setting command](media/add-setting.png)
+
+1. Enter `SCM_DO_BUILD_DURING_DEPLOYMENT` for the setting key.
+1. Enter `true` for the setting value.
+
+    This app setting enables build automation at deploy time, which automatically detects the start script and generates the *web.config* with it.
+
+1. In the **App Service** explorer, select the **Deploy to Web App** icon again, confirm by clicking **Deploy** again.
+
+1. Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and use `webhook_url` to form the following URL values and add them as whitelisted Callback URLs:
+
+    ``` bash
+    https://yoururl.azurewebsites.net/webhook/twitter
+    https://yoururl.azurewebsites.net/callbacks/addsub
+    https://yoururl.azurewebsites.net/callbacks/removesub
+    ```
+
+-----
+
+## Running the connector locally
 
 Next, we need to make the connector available via https. We'll use [ngrok](https://ngrok.com) for this.
 
