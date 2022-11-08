@@ -42,9 +42,12 @@ There are some ways of running this connector are described ahead.
 You can run the connector online with Azure.
 You can [Run the connector locally](#running-the-connector-locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
 
-### Running the connector with Azure
+<!-- ### Running the connector with Azure
 
-# Install with Visual Studio Code
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Ftie-api-example-twitter%2FXTAI-695%2Fmain.json)
+
+ -->
+# Install and Deploy Connector with Visual Studio Code
 
 - Have [Visual Studio Code](https://code.visualstudio.com/) installed.
 - The [Azure App Service extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureappservice) for Visual Studio Code.
@@ -59,10 +62,7 @@ You can [Run the connector locally](#running-the-connector-locally) or deploying
 #### Configure the App Service app and deploy code
 
 1. Select your application folder.
-
-# Deploy to Linux
-
-2. Right-click on App Services and select **Create new Web App**. A Linux container is used by default.
+2. Right-click on App Services and select **Create new Web App**. A Linux container is used by default (if you like to deploy a windows container see [here](https://learn.microsoft.com/en-us/azure/app-service/quickstart-nodejs?tabs=windows&pivots=development-environment-vscode)).
 1. Type a globally unique name for your web app and press **Enter**. The name must be unique across all of Azure and use only alphanumeric characters ('A-Z', 'a-z', and '0-9') and hyphens ('-').
 1. In Select a runtime stack, select the Node.js version you want. An **LTS** version is recommended.
 1. In Select a pricing tier, select **Free (F1)** and wait for the resources to be provisioned in Azure.
@@ -70,33 +70,6 @@ You can [Run the connector locally](#running-the-connector-locally) or deploying
 
     While Visual Studio Code provisions the Azure resources and deploys the code, it shows [progress notifications](https://code.visualstudio.com/api/references/extension-guidelines#notifications).
 
-# Deploy to Windows
-
-2. Right-click on App Services and select **Create new Web App... Advanced**.
-1. Type a globally unique name for your web app and press **Enter**. The name must be unique across all of Azure and use only alphanumeric characters ('A-Z', 'a-z', and '0-9') and hyphens ('-').
-1. Select **Create a new resource group**, then enter a name for the resource group, such as *AppServiceQS-rg*.
-1. Select the Node.js version you want. An **LTS** version is recommended.
-1. Select **Windows** for the operating system.
-1. Select the location you want to serve your app from. For example, *West Europe*.
-1. Select **Create new App Service plan**, then enter a name for the plan (such as *AppServiceQS-plan*), then select **F1 Free** for the pricing tier.
-1. For **Select an Application Insights resource for your app**, select **Skip for now** and wait the resources to be provisioned in Azure.
-1. In the popup **Always deploy the workspace "myApp" to \<app-name>"**, select **Yes**. This way, as long as you're in the same workspace, Visual Studio Code deploys to the same App Service app each time.
-
-    While Visual Studio Code provisions the Azure resources and deploys the code, it shows [progress notifications](https://code.visualstudio.com/api/references/extension-guidelines#notifications).
-
-    > [!NOTE]
-    > When deployment completes, your Azure app doesn't run yet because your project root doesn't have a *web.config*. Follow the remaining steps to generate it automatically. For more information, see [You do not have permission to view this directory or page](configure-language-nodejs.md#you-do-not-have-permission-to-view-this-directory-or-page).
-
-1. In the **App Service** explorer in Visual Studio code, expand the node for the new app, right-click **Application Settings**, and select **Add New Setting**:
-
-    ![Add app setting command](media/add-setting.png)
-
-1. Enter `SCM_DO_BUILD_DURING_DEPLOYMENT` for the setting key.
-1. Enter `true` for the setting value.
-
-    This app setting enables build automation at deploy time, which automatically detects the start script and generates the *web.config* with it.
-
-1. In the **App Service** explorer, select the **Deploy to Web App** icon again, confirm by clicking **Deploy** again.
 
 1. Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and use `webhook_url` to form the following URL values and add them as whitelisted Callback URLs:
 
