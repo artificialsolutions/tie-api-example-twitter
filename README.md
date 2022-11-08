@@ -38,13 +38,16 @@ In the Account Activity API/Sandbox section, click [Setup Dev Environment](https
 
 ## Connector Setup Instructions
 
-There are some ways of running this connector are described ahead.
-You can run the connector online with Azure.
-You can [Run the connector locally](#running-the-connector-locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
+There are some ways of running this connector and described ahead.
+- You can run the connector online with Azure.
+- You can  install and deploy using Visual Studio Code
+- You can [Run the connector locally](#running-the-connector-locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
 
- ### Running the connector with Azure
+## Running the connector with Azure
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/repository?=https://github.com/artificialsolutions/tie-api-example-twitter?ptmpl=parameters.azuredeploy.json)
+Click the button below to deploy the connector to Azure
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Ftie-api-example-twitter%2FXTAI-695-B%2Fazuredeploy.json)
 
 # Install and Deploy Connector with Visual Studio Code
 
