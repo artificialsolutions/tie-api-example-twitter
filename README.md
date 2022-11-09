@@ -49,6 +49,22 @@ Click the button below to deploy the connector to Azure
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Ftie-api-example-twitter%2FXTAI-695-B%2Fazuredeploy.json)
 
+After login you will be prompted to fill deployment basic details 
+
+hit "Review and create"
+
+after validation passed hit create
+
+you will be directed to the Overview page after deployment is complete and hit the "Go to resource group" button and you will see your resources click on your App service
+
+Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and use `webhook_url` to form the following URL values and add them as whitelisted Callback URLs:
+
+    ``` bash
+    https://yoururl.azurewebsites.net/webhook/twitter
+    https://yoururl.azurewebsites.net/callbacks/addsub
+    https://yoururl.azurewebsites.net/callbacks/removesub
+    ```
+
 # Install and Deploy Connector with Visual Studio Code
 
 - Have [Visual Studio Code](https://code.visualstudio.com/) installed.
