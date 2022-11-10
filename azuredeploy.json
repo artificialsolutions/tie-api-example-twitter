@@ -1,68 +1,114 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "webAppName": {
-            "type": "string",
-            "defaultValue": "[concat('Node-', uniqueString(resourceGroup().name, utcNow('F')))]",
-            "metadata": {
-                "description": "That name is the name of our application. It has to be unique.Type a name followed by your resource group name. (<name>-<resourceGroupName>)"
-            }
-        },
-        "location": {
-            "type": "string",
-            "defaultValue": "[resourceGroup().location]",
-            "metadata": {
-                "description": "Location for all resources."
-            }
-        }
+    "metadata": {
+      "_generator": {
+        "name": "bicep",
+        "version": "0.5.6.12127",
+        "templateHash": "17016281914347876853"
+      }
     },
-    "variables": {
-        "alwaysOn": false,
-        "sku": "Free",
-        "skuCode": "F1",
-        "workerSize": "0",
-        "workerSizeId": "0",
-        "numberOfWorkers": "1",
-        "linuxFxVersion": "NODE|lts",
-        "hostingPlanName": "[concat('hpn-', resourceGroup().name)]"
+    "parameters": {
+      "name": {
+        "type": "string",
+        "defaultValue": "acilinuxpublicipcontainergroup",
+        "metadata": {
+          "description": "Name for the container group"
+        }
+      },
+      "location": {
+        "type": "string",
+        "defaultValue": "[resourceGroup().location]",
+        "metadata": {
+          "description": "Location for all resources."
+        }
+      },
+      "image": {
+        "type": "string",
+        "defaultValue": "https://hub.docker.com/repository/docker/jpasol/asol-twitterconnector",
+        "metadata": {
+          "description": "Container image to deploy. Should be of the form repoName/imagename:tag for images stored in public Docker Hub, or a fully qualified URI for other registries. Images from private registries require additional registry credentials."
+        }
+      },
+      "port": {
+        "type": "int",
+        "defaultValue": 80,
+        "metadata": {
+          "description": "Port to open on the container and the public IP address."
+        }
+      },
+      "cpuCores": {
+        "type": "int",
+        "defaultValue": 1,
+        "metadata": {
+          "description": "The number of CPU cores to allocate to the container."
+        }
+      },
+      "memoryInGb": {
+        "type": "int",
+        "defaultValue": 2,
+        "metadata": {
+          "description": "The amount of memory to allocate to the container in gigabytes."
+        }
+      },
+      "restartPolicy": {
+        "type": "string",
+        "defaultValue": "Always",
+        "allowedValues": [
+          "Always",
+          "Never",
+          "OnFailure"
+        ],
+        "metadata": {
+          "description": "The behavior of Azure runtime if container has stopped."
+        }
+      }
     },
     "resources": [
-        {
-            "apiVersion": "2020-06-01",
-            "name": "[parameters('webAppName')]",
-            "type": "Microsoft.Web/sites",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
-            ],
-            "properties": {
-                "name": "[parameters('webAppName')]",
-                "siteConfig": {
-                    "linuxFxVersion": "[variables('linuxFxVersion')]",
-                    "alwaysOn": "[variables('alwaysOn')]"
-                },
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-                "clientAffinityEnabled": false
+      {
+        "type": "Microsoft.ContainerInstance/containerGroups",
+        "apiVersion": "2021-09-01",
+        "name": "[parameters('name')]",
+        "location": "[parameters('location')]",
+        "properties": {
+          "containers": [
+            {
+              "name": "[parameters('name')]",
+              "properties": {
+                "image": "[parameters('image')]",
+                "ports": [
+                  {
+                    "port": "[parameters('port')]",
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                  "requests": {
+                    "cpu": "[parameters('cpuCores')]",
+                    "memoryInGB": "[parameters('memoryInGb')]"
+                  }
+                }
+              }
             }
-        },
-        {
-            "apiVersion": "2020-06-01",
-            "name": "[variables('hostingPlanName')]",
-            "type": "Microsoft.Web/serverfarms",
-            "location": "[parameters('location')]",
-            "kind": "linux",
-            "sku": {
-                "Tier": "[variables('sku')]",
-                "Name": "[variables('skuCode')]"
-            },
-            "properties": {
-                "name": "[variables('hostingPlanName')]",
-                "workerSize": "[variables('workerSize')]",
-                "workerSizeId": "[variables('workerSizeId')]",
-                "numberOfWorkers": "[variables('numberOfWorkers')]",
-                "reserved": true
-            }
+          ],
+          "osType": "Linux",
+          "restartPolicy": "[parameters('restartPolicy')]",
+          "ipAddress": {
+            "type": "Public",
+            "ports": [
+              {
+                "port": "[parameters('port')]",
+                "protocol": "TCP"
+              }
+            ]
+          }
         }
-    ]
-}
+      }
+    ],
+    "outputs": {
+      "containerIPv4Address": {
+        "type": "string",
+        "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('name'))).ipAddress.ip]"
+      }
+    }
+  }
