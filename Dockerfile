@@ -1,8 +1,8 @@
 FROM node:18.12
 # Create app directory
 WORKDIR /usr/src/app
-COPY package*.json ./
+ADD package*.json ./
 RUN npm install
 # Bundle app source
-COPY . .
+ADD  . .
 CMD [ "node", "app.js" ]
