@@ -35,66 +35,86 @@ In the Account Activity API/Sandbox section, click [Setup Dev Environment](https
 1. Open your app's [Details](https://developer.twitter.com/en/apps)
 2. Navigate into Permissions > Edit > Access permission section > Enable Read, Write and direct messages.
 3. On the Keys and Tokens tab > click Create button. Take note of all four keys and tokens.
+4. Create a new file called .env based on .env.sample and fill in your Twitter keys, tokens, Teneo Engine URL and webhook environment name. Twitter keys and access tokens are found on your app page on apps.twitter.com.
 
 ## Connector Setup Instructions
 
 There are some ways of running this connector and described ahead.
+
 - You can run the connector online with Azure.
-- You can  install and deploy using Visual Studio Code
 - You can [Run the connector locally](#running-the-connector-locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
 
-## Running the connector with Azure
+## Running the connector with Azure & Docker
 
-Click the button below to deploy the connector to Azure
+### Prerequisites
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Ftie-api-example-twitter%2FXTAI-695-B%2Fazuredeploy.json)
+- [Install Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli).
+- You must also have [Docker](https://docs.docker.com/get-docker/) installed locally.
 
-After login you will be prompted to fill deployment basic details 
+#### Build and setup this repository
 
-hit "Review and create"
-
-after validation passed hit create
-
-you will be directed to the Overview page after deployment is complete and hit the "Go to resource group" button and you will see your resources click on your App service
-
-Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and use `webhook_url` to form the following URL values and add them as whitelisted Callback URLs:
+1. Clone this repository:
 
     ``` bash
-    https://yoururl.azurewebsites.net/webhook/twitter
-    https://yoururl.azurewebsites.net/callbacks/addsub
-    https://yoururl.azurewebsites.net/callbacks/removesub
+    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
     ```
 
-# Install and Deploy Connector with Visual Studio Code
-
-- Have [Visual Studio Code](https://code.visualstudio.com/) installed.
-- The [Azure App Service extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureappservice) for Visual Studio Code.
- <!-- - <a href="https://git-scm.com/" target="_blank">Install Git</a> -->
-- In Visual Studio Code, in the [Activity Bar](https://code.visualstudio.com/docs/getstarted/userinterface), select the **Azure** logo.
-- In the **App Service** explorer, select **Sign in to Azure...** and follow the instructions.
-
-    In Visual Studio Code, you should see your Azure email address in the Status Bar and your subscription in the **AZURE APP SERVICE** explorer.
-
-    ![sign in to Azure](./media/sign-in.png)
-
-#### Configure the App Service app and deploy code
-
-1. Select your application folder.
-2. Right-click on App Services and select **Create new Web App**. A Linux container is used by default (if you like to deploy a windows container see [here](https://learn.microsoft.com/en-us/azure/app-service/quickstart-nodejs?tabs=windows&pivots=development-environment-vscode)).
-1. Type a globally unique name for your web app and press **Enter**. The name must be unique across all of Azure and use only alphanumeric characters ('A-Z', 'a-z', and '0-9') and hyphens ('-').
-1. In Select a runtime stack, select the Node.js version you want. An **LTS** version is recommended.
-1. In Select a pricing tier, select **Free (F1)** and wait for the resources to be provisioned in Azure.
-1. In the popup **Always deploy the workspace "myApp" to \<app-name>"**, select **Yes**. This way, as long as you're in the same workspace, Visual Studio Code deploys to the same App Service app each time.
-
-    While Visual Studio Code provisions the Azure resources and deploys the code, it shows [progress notifications](https://code.visualstudio.com/api/references/extension-guidelines#notifications).
-
-
-1. Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and use `webhook_url` to form the following URL values and add them as whitelisted Callback URLs:
+2. Build the docker image for the connector.
 
     ``` bash
-    https://yoururl.azurewebsites.net/webhook/twitter
-    https://yoururl.azurewebsites.net/callbacks/addsub
-    https://yoururl.azurewebsites.net/callbacks/removesub
+    docker build . -t 'nameyourimage'
+    ```
+
+3. Click the button below to deploy the registry template to Azure
+
+    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Ftie-api-example-twitter%2FXTAI-695-B%2Fazuredeploy.json)
+
+    After login you will be prompted to fill deployment basic details for your registry.
+
+    Hit "Review and create"
+
+    After validation passed hit create
+
+    You will be directed to the Overview page after deployment is complete and hit the "Go to resource group" button and you will see your resources click on your App service
+
+4. Create an alias of the image with the fully qualified path to your registry
+
+    ``` bash
+    docker tag 'nameyourimage' 'registryname'.azurecr.io/'nameyourimage'
+    ```
+
+5. log into the Azure CLI and then authenticate to your registry:
+
+    ``` bash
+    az login
+    az acr login --name myregistry
+    ```
+
+6. Push the image to your registry
+
+    ``` bash
+    docker push myregistry.azurecr.io/'imagename'
+    ```
+
+7. Use the docker run command to run your image from your registry.
+
+    ``` bash
+    docker run -d 'registryname'.azurecr.io/'imagename' 
+    ```
+
+    which will return a sha number like '338b0e48a....'
+
+8. Use the sha from the step above to run a bash shell inside the container
+
+   ``` bash
+    docker exec -it 'sha' bin/bash
+    ```
+
+9. Run our script to get direct messages or mentions
+
+    ``` bash
+    node example_scripts/get-direct-messages.js
+    node example_scripts/get-mentions.js 
     ```
 
 -----
