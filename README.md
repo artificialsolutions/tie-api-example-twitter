@@ -23,12 +23,25 @@ To run the connector locally, [ngrok](https://ngrok.com/) is preferred to make t
 ### Create a Twitter app
 
 1. Apply for a Twitter Developer account on [developer.twitter.com](https://developer.twitter.com/en/apps), select "Making a Bot", and fill in all required fields. On the Specifics section, set "Will your app use Tweet, Retweet, like, follow, or Direct Message functionality?" to YES. You may set all other options to No. Continue filling in required descriptions and validate Twitter's activation email.
+2. Create a Twitter App [here](https://developer.twitter.com/en/apps/create). Tap "Create an App". You will be prompted to apply for a Twitter Developer account. Tap "Apply".
+3. Fill all required fields and tap "Let's do this"
+4. Accept the Developer Agreement & policy terms
+5. After you name your app, tap the "get keys" button
+6. Take note of your keys and tokens tap "Dashboard" (and confirm).
 
-2. Create a Twitter App [here](https://developer.twitter.com/en/apps/create). Fill all required fields and tap "Create"
 
-### Create a Twitter Account Activity API
+### Create a Twitter Dev Environment
 
-In the Account Activity API/Sandbox section, click [Setup Dev Environment](https://developer.twitter.com/en/account/environments). Link this new environment to the App you created in the previous step and take note of the `environment_label` for later use.
+1. Tap in the "Projects & Apps" section on the left of your dashboard, click on your project name
+2. Apply for Do you need Elevated access for your Project.
+3. Fill all required fields and tap "next"
+4. Specify how will you use twitter data, required questions and hit "next"
+5. Hit next on verification of information.
+6. Accept developer agreement & policy
+
+Once your request for elevated Access is approved you should have a list of [environments](https://developer.twitter.com/en/account/environments).
+
+In the Account Activity API/Sandbox section, click Setup Dev Environment. Name your environment and link this new environment to the App you created in the previous step and take note of the `environment_label` for later use.
 
 ### Configure the Twitter App
 
