@@ -43,13 +43,6 @@ Once your request for elevated Access is approved you should have a list of [env
 
 In the Account Activity API/Sandbox section, click Setup Dev Environment. Name your environment and link this new environment to the App you created in the previous step and take note of the `environment_label` for later use.
 
-### Configure the Twitter App
-
-1. Open your app's [Details](https://developer.twitter.com/en/apps)
-2. Navigate into Permissions > Edit > Access permission section > Enable Read, Write and direct messages.
-3. On the Keys and Tokens tab > click Create button. Take note of all four keys and tokens.
-4. Create a new file called .env based on .env.sample and fill in your Twitter keys, tokens, Teneo Engine URL and webhook environment name. Twitter keys and access tokens are found on your app page on apps.twitter.com.
-
 ## Connector Setup Instructions
 
 There are some ways of running this connector and described ahead.
@@ -72,13 +65,14 @@ There are some ways of running this connector and described ahead.
     git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
     ```
 
-2. Build the docker image for the connector.
+2. Create a new file called .env based on .env.sample and fill in your Twitter keys, tokens, Teneo Engine URL. 
+3. Build the docker image for the connector.
 
     ``` bash
     docker build . -t 'nameyourimage'
     ```
 
-3. Click the button below to deploy the registry template to Azure
+4. Click the button below to deploy the registry template to Azure
 
     [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Ftie-api-example-twitter%2FXTAI-695-B%2Fazuredeploy.json)
 
@@ -88,28 +82,38 @@ There are some ways of running this connector and described ahead.
 
     After validation passed hit create
 
-    You will be directed to the Overview page after deployment is complete and hit the "Go to resource group" button and you will see your resources click on your App service
+    You will be directed to the Overview page after deployment is complete and hit the "Go to resource group" button and you will see your resources click on your App service.
+    Copy the url from your app You will need it for the next step
 
-4. Create an alias of the image with the fully qualified path to your registry
+### Configure the Twitter App
+
+1. Open your app's [Details](https://developer.twitter.com/en/apps)
+2. Tap the edit button on "User authentication settings"
+3. Enable Read, Write and direct messages, and "Web App, Automated App or Bot" as a type of APP
+4. Under App info paste your azure url into "callback url" and "website url"
+
+### Build and deploy Docker Image
+
+1. Create an alias of the image with the fully qualified path to your registry
 
     ``` bash
     docker tag 'nameyourimage' 'registryname'.azurecr.io/'nameyourimage'
     ```
 
-5. log into the Azure CLI and then authenticate to your registry:
+1. log into the Azure CLI and then authenticate to your registry:
 
     ``` bash
     az login
     az acr login --name myregistry
     ```
 
-6. Push the image to your registry
+1. Push the image to your registry
 
     ``` bash
     docker push myregistry.azurecr.io/'imagename'
     ```
 
-7. Use the docker run command to run your image from your registry.
+1. Use the docker run command to run your image from your registry.
 
     ``` bash
     docker run -d 'registryname'.azurecr.io/'imagename' 
@@ -117,13 +121,13 @@ There are some ways of running this connector and described ahead.
 
     which will return a sha number like '338b0e48a....'
 
-8. Use the sha from the step above to run a bash shell inside the container
+1. Use the sha from the step above to run a bash shell inside the container
 
    ``` bash
     docker exec -it 'sha' bin/bash
     ```
 
-9. Run our script to get direct messages or mentions
+1. Run our script to get direct messages or mentions
 
     ``` bash
     node example_scripts/get-direct-messages.js
