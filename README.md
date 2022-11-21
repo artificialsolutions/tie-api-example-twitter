@@ -59,20 +59,7 @@ There are some ways of running this connector and described ahead.
 
 #### Build and setup this repository
 
-1. Clone this repository:
-
-    ``` bash
-    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
-    ```
-
-2. Create a new file called .env based on .env.sample and fill in your Twitter keys, tokens, Teneo Engine URL. 
-3. Build the docker image for the connector.
-
-    ``` bash
-    docker build . -t 'nameyourimage'
-    ```
-
-4. Click the button below to deploy the registry template to Azure
+1. Click the button below to deploy the registry template to Azure
 
     [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Ftie-api-example-twitter%2FXTAI-695-B%2Fazuredeploy.json)
 
@@ -83,14 +70,42 @@ There are some ways of running this connector and described ahead.
     After validation passed hit create
 
     You will be directed to the Overview page after deployment is complete and hit the "Go to resource group" button and you will see your resources click on your App service.
-    Copy the url from your app You will need it for the next step
-
+    Copy the url from your app You will need it for the next step.
 ### Configure the Twitter App
 
 1. Open your app's [Details](https://developer.twitter.com/en/apps)
 2. Tap the edit button on "User authentication settings"
 3. Enable Read, Write and direct messages, and "Web App, Automated App or Bot" as a type of APP
-4. Under App info paste your azure url into "callback url" and "website url"
+4. Under App info paste your azure url into "callback url" and "website url", hit save.
+5. Take note of the new keys and save them.
+6. Under Keys Access Token and Secret click "regenerate" then confirm your option.
+7. Copy the new Access token and Keys and substitute the old ones.
+
+### Build and deploy Docker Image
+
+1. Clone this repository:
+
+    ``` bash
+    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
+    ```
+
+1. Create a new file called .env based on .env.sample and fill in your Twitter keys, tokens, Teneo Engine URL. Like so.
+
+    | env Key| Twitter Key|
+    | ------------- |:-------------:|
+    | TWITTER_CONSUMER_KEY| Api-key  |
+    | TWITTER_CONSUMER_SECRET| Api-Secret|
+    | TWITTER_ACCESS_TOKEN| Access Token|
+    | TWITTER_WEBHOOK_ENV| 'environment name'|
+    | TENEO_ENGINE_URL|'url for you teneo webchat' |
+
+
+1. Build the docker image for the connector.
+
+    ``` bash
+    docker build . -t 'nameyourimage'
+    ```
+
 
 ### Tag and deploy Docker Image
 
