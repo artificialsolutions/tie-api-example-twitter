@@ -185,7 +185,11 @@ Next, we need to make the connector available via https. We'll use [ngrok](https
     npm install
     ```
 
+<<<<<<< Updated upstream
 3. Create a new file called `.env` based on `.env.sample` and fill in your Twitter keys, tokens, Teneo Engine URL and webhook environment name. Twitter keys and access tokens are found on your app page on [apps.twitter.com](https://apps.twitter.com/).
+=======
+3. Create a new file called `.env` based on `.env.sample` and fill in your Twitter keys, tokens, Teneo Engine URL and webhook environment name. Twitter keys and access tokens are found on your app page on [developer.twitter.com](https://developer.twitter.com). 
+>>>>>>> Stashed changes
 
 4. Run locally:
 
