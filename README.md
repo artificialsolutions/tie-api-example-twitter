@@ -103,7 +103,7 @@ There are some ways of running this connector and described ahead.
 1. Build the docker image for the connector.
 
     ``` bash
-    docker build . -t 'nameyourimage'
+    docker build . -t imagename
     ```
 
 
@@ -112,34 +112,34 @@ There are some ways of running this connector and described ahead.
 1. Create an alias of the image with the fully qualified path to your registry
 
     ``` bash
-    docker tag 'nameyourimage' 'registryname'.azurecr.io/'nameyourimage'
+    docker tag imagename registryname.azurecr.io/imagename
     ```
 
 1. log into the Azure CLI and then authenticate to your registry:
 
     ``` bash
     az login
-    az acr login --name myregistry
+    az acr login --name registryname
     ```
 
 1. Push the image to your registry
 
     ``` bash
-    docker push myregistry.azurecr.io/'imagename'
+    docker push registryname.azurecr.io/imagename
     ```
 
 1. Use the docker run command to run your image from your registry.
 
     ``` bash
-    docker run -d 'registryname'.azurecr.io/'imagename' 
+    docker run -d registryname.azurecr.io/imagename
     ```
 
-    which will return a sha number like '338b0e48a....'
+    which will return a number like '338b0e48a....'
 
-1. Use the sha from the step above to run a bash shell inside the container
+1. Use the number from the step above to run a bash shell inside the container
 
    ``` bash
-    docker exec -it 'sha' bin/bash
+    docker exec -it numberfrompreviousstep bin/bash
     ```
 
 1. Run our script to get direct messages or mentions
