@@ -37,6 +37,9 @@ Two ways of running this connector are described ahead. The first metod, is [Run
 The second way is [Running the connector locally](#running-the-connector-locally) or deploying it on a server of your choice. This is preferred if you're familiar with Node.js development and want to have a closer look at the code, or to implement modifications and enhancements.
 
 ### Running the connector on Heroku
+
+**Note: Starting November 28, 2022, free Heroku Dynos, free Heroku Postgres, and free Heroku Data for Redis® plans will no longer be available.**
+
 1. Click the button below to deploy the connector to Heroku:
 
     [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/artificialsolutions/tie-api-example-twitter)
