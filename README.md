@@ -29,7 +29,6 @@ To run the connector locally, [ngrok](https://ngrok.com/) is preferred to make t
 5. After you name your app, tap the "get keys" button
 6. Take note of your keys and tokens tap "Dashboard" (and confirm).
 
-
 ### Create a Twitter Dev Environment
 
 1. Tap in the "Projects & Apps" section on the left of your dashboard, click on your project name
@@ -71,6 +70,7 @@ There are some ways of running this connector and described ahead.
 
     You will be directed to the Overview page after deployment is complete and hit the "Go to resource group" button and you will see your resources click on your App service.
     Copy the url from your app You will need it for the next step.
+
 ### Configure the Twitter App
 
 1. Open your app's [Details](https://developer.twitter.com/en/apps)
@@ -99,13 +99,13 @@ There are some ways of running this connector and described ahead.
     | TWITTER_WEBHOOK_ENV| 'environment name'|
     | TENEO_ENGINE_URL|'url for you teneo webchat' |
 
-
 1. Build the docker image for the connector.
 
     ``` bash
     docker build . -t imagename
     ```
 
+Note: if you are using a Mac "M1 Chip" use: ` docker buildx build --platform=linux/amd64 -t imagename . `
 
 ### Tag and deploy Docker Image
 
@@ -128,18 +128,37 @@ There are some ways of running this connector and described ahead.
     docker push registryname.azurecr.io/imagename
     ```
 
-1. Use the docker run command to run your image from your registry.
+1. Use the az acr repository list command to verify that the push was successful
+
+    ``` bash
+    az acr repository list -n <registry-name>
+    ```
+
+1. Create an ACI context which associates Docker with an Azure subscription and resource group so you can create and manage container instances.
+
+    ``` bash
+    docker login azure
+    docker context create namecontext
+    ```
+When prompted, select your Azure subscription ID, then select an existing resource group (previously created when template deployed)
+
+1. Change to your recently created ACI context
+    ``` bash
+    docker context use namecontext
+    ```
+
+1. Use the docker run command to run your image from your registry in your context.
 
     ``` bash
     docker run -d registryname.azurecr.io/imagename
     ```
 
-    which will return a number like '338b0e48a....'
+    which will return a image name 'imagename'
 
-1. Use the number from the step above to run a bash shell inside the container
+1. Use the name from the step above to run a bash shell inside the container
 
    ``` bash
-    docker exec -it numberfrompreviousstep bin/bash
+    docker exec -it imagename /bin/bash
     ```
 
 1. Run our script to get direct messages or mentions
