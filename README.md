@@ -99,6 +99,14 @@ There are some ways of running this connector and described ahead.
     | TWITTER_WEBHOOK_ENV| 'environment name'|
     | TENEO_ENGINE_URL|'url for you teneo webchat' |
 
+1. Create an ACI context which associates Docker with an Azure subscription and resource group so you can create and manage container instances.
+
+    ``` bash
+    docker login azure
+    docker context create aci namecontext
+    ```
+    When prompted, select your Azure subscription ID, then select an existing resource group (previously created when template deployed)
+
 1. Build the docker image for the connector.
 
     ``` bash
@@ -133,14 +141,6 @@ Note: if you are using a Mac "M1 Chip" use: ` docker buildx build --platform=lin
     ``` bash
     az acr repository list -n <registry-name>
     ```
-
-1. Create an ACI context which associates Docker with an Azure subscription and resource group so you can create and manage container instances.
-
-    ``` bash
-    docker login azure
-    docker context create namecontext
-    ```
-When prompted, select your Azure subscription ID, then select an existing resource group (previously created when template deployed)
 
 1. Change to your recently created ACI context
     ``` bash
