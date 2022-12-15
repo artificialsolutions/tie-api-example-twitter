@@ -1,11 +1,11 @@
 const request = require('request-promise')
-const auth = require('../../helpers/auth.js')
-const args = require('../args.js')
+const auth = require('../helpers/auth.js')
+const args = require('./args.js')
 
 
-// request options
+// request options we get the mentions
 var request_options = {
-  url: 'https://api.twitter.com/1.1/account_activity/all/' + args.environment + '/webhooks.json',
+  url: 'https://api.twitter.com/1.1/statuses/mentions_timeline.json',
   oauth: auth.twitter_oauth
 }
 

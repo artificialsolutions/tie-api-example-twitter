@@ -66,4 +66,3 @@ module.exports = function (req, resp) {
     resp.render('status', json_response)
   }
 }
-

@@ -15,16 +15,16 @@
     "command-line-args": "^5.0.1",
     "csurf": "^1.9.0",
     "dotenv": "^8.0.0",
-    "ejs": "^2.7.3",
+    "ejs": "^3.1.8",
     "express": "^4.17.1",
     "http-auth": "^3.2.3",
     "memory-cache": "^0.2.0",
-    "passport": "^0.4.0",
-    "passport-twitter": "^1.0.4",
+    "passport": "^0.6.0",
+    "passport-twitter": "^0.1.5",
     "query-string": "^5.0.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.5",
-    "socket.io": "2.3.0",
+    "socket.io": "^4.5.3",
     "uuid": "^3.2.1"
   },
   "repository": {
@@ -34,9 +34,7 @@
   "keywords": [
     "teneo",
     "node",
-    "heroku",
     "express",
-    "webhook",
     "twitter",
     "tweet",
     "DM"
