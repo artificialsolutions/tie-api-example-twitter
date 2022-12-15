@@ -18,8 +18,9 @@ An Azure account with an active subscription is required. [Create an account for
 
 To run the connector locally, [ngrok](https://ngrok.com/) is preferred to make the connector available via HTTPS.
 
+### Node
+[Node.js via nvm](https://github.com/nvm-sh/nvm)
 ## GETTING STARTED
-
 ### Create a Twitter app
 
 1. Apply for a Twitter Developer account on [developer.twitter.com](https://developer.twitter.com/en/apps), select "Making a Bot", and fill in all required fields. On the Specifics section, set "Will your app use Tweet, Retweet, like, follow, or Direct Message functionality?" to YES. You may set all other options to No. Continue filling in required descriptions and validate Twitter's activation email.
@@ -69,14 +70,14 @@ There are some ways of running this connector and described ahead.
     After validation passed hit create
 
     You will be directed to the Overview page after deployment is complete and hit the "Go to resource group" button and you will see your resources click on your App service.
-    Copy the url from your app You will need it for the next step.
+    Copy the login server from your app You will need it for the next step.
 
 ### Configure the Twitter App
 
 1. Open your app's [Details](https://developer.twitter.com/en/apps)
 2. Tap the edit button on "User authentication settings"
 3. Enable Read, Write and direct messages, and "Web App, Automated App or Bot" as a type of APP
-4. Under App info paste your azure url into "callback url" and "website url", hit save.
+4. Under App info paste your azure login server into both "callback url" and "website url", hit save.
 5. Take note of the new keys and save them.
 6. Under Keys Access Token and Secret click "regenerate" then confirm your option.
 7. Copy the new Access token and Keys and substitute the old ones.
@@ -93,21 +94,23 @@ There are some ways of running this connector and described ahead.
 
     | env Key| Twitter Key|
     | ------------- |:-------------:|
-    | TWITTER_CONSUMER_KEY| Api-key  |
-    | TWITTER_CONSUMER_SECRET| Api-Secret|
-    | TWITTER_ACCESS_TOKEN| Access Token|
-    | TWITTER_WEBHOOK_ENV| 'environment name'|
+    | TWITTER_CONSUMER_KEY| 'Api-key'  |
+    | TWITTER_CONSUMER_SECRET| 'Api-Secret'|
+    | TWITTER_ACCESS_TOKEN| 'Access Token'|
+    | TWITTER_ACCESS_SECRET| 'Access Token Secret'|
+    | TWITTER_WEBHOOK_ENV| 'twitter environment name'|
     | TENEO_ENGINE_URL|'url for you teneo webchat' |
 
-1. Create an ACI context which associates Docker with an Azure subscription and resource group so you can create and manage container instances.
+1. Create an ACI context which associates Docker with an Azure subscription and resource group so you can create and manage container instances. Remember to Substitute ` nameyourcontext` for one of your choosing.
 
     ``` bash
     docker login azure
-    docker context create aci namecontext
+    docker context create aci nameyourcontext
     ```
+
     When prompted, select your Azure subscription ID, then select an existing resource group (previously created when template deployed)
 
-1. Build the docker image for the connector.
+1. Build the docker image for the connector. Remember to Substitute ` imagename` for one of your choosing.
 
     ``` bash
     docker build . -t imagename
@@ -117,7 +120,7 @@ Note: if you are using a Mac "M1 Chip" use: ` docker buildx build --platform=lin
 
 ### Tag and deploy Docker Image
 
-1. Create an alias of the image with the fully qualified path to your registry
+1. Create an alias of the image with the fully qualified path to your registry. Remember to Substitute ` registryname` and ` imagename` for the one you chose on previous steps.
 
     ``` bash
     docker tag imagename registryname.azurecr.io/imagename
@@ -139,26 +142,27 @@ Note: if you are using a Mac "M1 Chip" use: ` docker buildx build --platform=lin
 1. Use the az acr repository list command to verify that the push was successful
 
     ``` bash
-    az acr repository list -n <registry-name>
+    az acr repository list -n registryname
     ```
 
-1. Change to your recently created ACI context
+1. Change to your recently created ACI context.  Remember to Substitute ` nameyourcontext` for the one you chose on 'Create an ACI context' step .
+
     ``` bash
-    docker context use namecontext
+    docker context use nameyourcontext
     ```
 
-1. Use the docker run command to run your image from your registry in your context.
+1. Use the docker run command to run your image from your registry in your context. Remember to Substitute ` registryname` and ` imagename` for the one you chose on previous steps.
 
     ``` bash
     docker run -d registryname.azurecr.io/imagename
     ```
 
-    which will return a image name 'imagename'
+    which will return a randomly generated new image name 'RandomGeneratedName'
 
 1. Use the name from the step above to run a bash shell inside the container
 
    ``` bash
-    docker exec -it imagename /bin/bash
+    docker exec -it RandomGeneratedName /bin/bash
     ```
 
 1. Run our script to get direct messages or mentions
@@ -180,46 +184,6 @@ Next, we need to make the connector available via https. We'll use [ngrok](https
     ngrok http 5000
     ```
 
-2. Running the command above will display a public forwarding https URL. Copy it, we will use it as a `webhook_url` in the final step below.
-
-3. Revisit your [https://developer.twitter.com/en/apps](Details), click 'Edit', and use `webhook_url` to form the following URL values and add them as whitelisted Callback URLs:
-
-    ``` bash
-    https://yoururl.ngrok.io/webhook/twitter
-    https://yoururl.ngrok.io/callbacks/addsub
-    https://yoururl.ngrok.io/callbacks/removesub
-    ```
-
-#### Setup & run a Node.js web app
-
-1. Clone this repository:
-
-    ``` bash
-    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
-    ```
-
-2. Install Node.js dependencies:
-
-    ``` bash
-    npm install
-    ```
-
-3. Create a new file called .env based on .env.sample and fill in your Twitter keys, tokens, Teneo Engine URL. Like so.
-
-    | env Key| Twitter Key|
-    | ------------- |:-------------:|
-    | TWITTER_CONSUMER_KEY| Api-key  |
-    | TWITTER_CONSUMER_SECRET| Api-Secret|
-    | TWITTER_ACCESS_TOKEN| Access Token|
-    | TWITTER_WEBHOOK_ENV| 'environment name'|
-    | TENEO_ENGINE_URL|'url for you teneo webchat' |
-
-4. Run locally:
-
-    ```bash
-    npm start
-    ```
-
 *Note for Mac Users you might get
 
  ``` bash
@@ -229,7 +193,42 @@ Error: listen EADDRINUSE: address already in use :::5000
 
 Airplay is using port 5000 you can deactivate it in System Preferences › Sharing and uncheck  ```AirPlay  Receiver``` to release port 5000. ([source](https://nono.ma/port-5000-used-by-control-center-in-macos-controlce))
 
-That's it! You can now interact with your Teneo solution powered bot with Direct Messages, Tweet mentions, and Tweet replies.
+1. Running the command above will display a public forwarding https URL. Copy it, we will use it in the step below.
+
+1. Revisit your app's [Details](https://developer.twitter.com/en/apps)
+1. Under App info tap the edit button on "User authentication settings" paste your public forwarding https URL (` https://yoururl.ngrok.io `) into both  "callback url" and "website url", hit save.
+
+#### Setup & run a Node.js web app
+
+1. Clone this repository:
+
+    ``` bash
+    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
+    ```
+
+1. Create a new file called .env based on .env.sample and fill in your Twitter keys, tokens, Teneo Engine URL. Like so.
+
+    | env Key| Twitter Key|
+    | ------------- |:-------------:|
+    | TWITTER_CONSUMER_KEY| 'Api-key'  |
+    | TWITTER_CONSUMER_SECRET| 'Api-Secret'|
+    | TWITTER_ACCESS_TOKEN| 'Access Token'|
+    | TWITTER_ACCESS_SECRET| 'Access Token Secret'|
+    | TWITTER_WEBHOOK_ENV| 'twitter environment name'|
+    | TENEO_ENGINE_URL|'url for you teneo webchat' |
+
+1. Install dependencies locally:
+
+    ```bash
+    npm install
+    ```
+1. Run our script to get direct messages or mentions
+
+    ``` bash
+    node example_scripts/get-direct-messages.js
+    node example_scripts/get-mentions.js 
+    ```
+That's it! You can now interact with your Teneo solution powered bot with Direct Messages and Tweet mentions.
 
 ## Production considerations
 
