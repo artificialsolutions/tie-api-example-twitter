@@ -87,7 +87,7 @@ There are some ways of running this connector and described ahead.
 1. Clone this repository:
 
     ``` bash
-    git clone -b XTAI-695 https://github.com/artificialsolutions/tie-api-example-twitter.git
+    git clone https://github.com/artificialsolutions/tie-api-example-twitter.git
     ```
 
 1. Create a new file called .env based on .env.sample and fill in your Twitter keys, tokens, Teneo Engine URL. Like so.
