@@ -61,7 +61,7 @@ There are some ways of running this connector and described ahead.
 
 1. Click the button below to deploy the registry template to Azure
 
-    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Fmaster%2Ftie-api-example-twitter%2Fazuredeploy.json)
+    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Ftie-api-example-twitter%2Fmaster%2Fazuredeploy.json)
 
     After login you will be prompted to fill deployment basic details for your registry.
 
